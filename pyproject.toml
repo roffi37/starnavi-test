@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.12"
 fastapi = "^0.112.0"
 uvicorn = {extras = ["standart"], version = "^0.30.5"}
+pytest = "^8.3.2"
 
 
 [build-system]
