@@ -10,4 +10,5 @@ class Post(BaseModel):
     content: str
     authors: List["User"]
     tags: List["Tag"]
+    comments: List["Comment"]
     created_at: datetime
