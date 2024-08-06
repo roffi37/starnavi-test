@@ -10,4 +10,3 @@ class Comment(BaseModel):
     likes: int
     dislikes: int
     created_at: datetime
-
