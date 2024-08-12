@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 from typing import List
 
 from src.db.db import Base
@@ -9,9 +10,12 @@ class Post(Base):
 
     title: Mapped[str]
     content: Mapped[str]
-    authors: Mapped[List["User"]] = relationship(
-        secondary="users_posts_associations",
-        back_populates="posts",
-        uselist=True,
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    author: Mapped["User"] = relationship(
+        "User",
+        back_populates="posts"
     )
-    comments: Mapped["Comment"]
+    comments: Mapped[List["Comment"]] = relationship(
+        "Comment",
+        back_populates="post"
+    )

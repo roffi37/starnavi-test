@@ -8,10 +8,15 @@ class Comment(Base):
     __tablename__ = "comments"
 
     content: Mapped[str]
-    author: Mapped["User"] = mapped_column(ForeignKey("posts.id"))
-    author_id: Mapped[int] = relationship(
+    likes: Mapped[int]
+    dislikes: Mapped[int]
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    author: Mapped["User"] = relationship(
         "User",
         back_populates="comments",
     )
-    likes: Mapped[int]
-    dislikes: Mapped[int]
+    post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
+    post: Mapped["Post"] = relationship(
+        "Post",
+        back_populates="comments",
+    )
