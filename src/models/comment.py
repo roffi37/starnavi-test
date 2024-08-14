@@ -12,11 +12,9 @@ class Comment(Base):
     dislikes: Mapped[int]
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     author: Mapped["User"] = relationship(
-        "User",
         back_populates="comments",
     )
     post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
     post: Mapped["Post"] = relationship(
-        "Post",
         back_populates="comments",
     )
