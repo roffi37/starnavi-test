@@ -28,7 +28,7 @@ database_settings = DatabaseSettings()
 
 
 class Settings(BaseSettings):
-    database: DatabaseSettings = database_settings
+    database: DatabaseSettings()
 
 
 
