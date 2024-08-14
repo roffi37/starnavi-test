@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 
+from src.repositories.base import BaseRepository
+
 
 class BaseService(ABC):
 
     def __init__(self, repository):
-        self.repository = repository
+        self.repository: BaseRepository = repository
 
     @abstractmethod
     async def get_all(self):
@@ -24,4 +26,4 @@ class BaseService(ABC):
 
     @abstractmethod
     async def delete(self, id_):
-        return await self.repository.delete(id_)
+        return await self.repository.delete_one(id_)
