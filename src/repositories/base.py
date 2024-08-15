@@ -1,32 +1,36 @@
-from abc import ABC, abstractmethod
-
+from abc import ABC
 from pydantic_settings import BaseSettings
+from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class BaseRepository(ABC):
-    model = None
 
-    def __init__(self, session: AsyncSession, settings: BaseSettings):
+    def __init__(self, session: AsyncSession, settings: BaseSettings, model):
         self.session = session
         self.settings = settings
+        self.model = model
 
-    @abstractmethod
     async def get_all(self):
-        pass
+        stmt = select(self.model)
+        result = await self.session.execute(stmt)
+        return [row[0].to_read_model() for row in result.all()]
 
-    @abstractmethod
     async def get_one(self, id_):
         pass
 
-    @abstractmethod
     async def create_one(self, data):
-        pass
+        stmt = insert(self.model).values(data).returning(self.model)
+        result = await self.session.execute(stmt)
+        return result.scalar().to_read_model()
 
-    @abstractmethod
     async def update_one(self, id_, data):
-        pass
+        data = {key: value for key, value in data.items() if value is not None}
+        stmt = update(self.model).values(data).filter_by(id=id_).returning(self.model)
+        result = await self.session.execute(stmt)
+        return result.scalar().to_read_model()
 
-    @abstractmethod
     async def delete_one(self, id_):
-        pass
+        stmt = delete(self.model).filter_by(id=id_).returning(self.model)
+        result = await self.session.execute(stmt)
+        return result.scalar().to_read_model()
