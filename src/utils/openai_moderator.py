@@ -1,9 +1,10 @@
 from openai import OpenAI
 
-API_KEY = "sk--kjyma1pmZmAZCVoJA-n1YqIT9stCZ7_r4HGE67xGDT3BlbkFJDn-rlRGEDCEXsuCCDxJrfb4bOmwxGEh-fVmao-HksA"
+from src.config import get_settings
 
+settings = get_settings()
 
-client = OpenAI(api_key=API_KEY)
+client = OpenAI(api_key=settings.openai.API_KEY)
 
 
 def check_for_swearing(text: str) -> bool:

@@ -1,12 +1,21 @@
+from functools import lru_cache
+
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class DatabaseSettings(BaseSettings):
-    POSTGRES_HOST: str
-    POSTGRES_PORT: str
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
+class Base(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+    )
+
+class DatabaseSettings(Base):
+    POSTGRES_HOST: str = Field(default="localhost")
+    POSTGRES_PORT: str = Field(default="5432")
+    POSTGRES_USER: str = Field(default="user")
+    POSTGRES_PASSWORD: str = Field(default="password")
+    POSTGRES_DB: str = Field(default="db")
 
     def generate_async_database_url(self) -> str:
         url = (
@@ -19,19 +28,16 @@ class DatabaseSettings(BaseSettings):
         )
         return url
 
-    model_config = SettingsConfigDict(
-        env_file=".env",
-    )
+class OpenAISettings(Base):
+    API_KEY: str = Field(default="token")
 
 
-database_settings = DatabaseSettings()
+class Settings(BaseModel):
+
+    database: DatabaseSettings = DatabaseSettings()
+    openai: OpenAISettings = OpenAISettings()
 
 
-class Settings(BaseSettings):
-    database: DatabaseSettings()
-
-
-
+@lru_cache
 def get_settings():
-    return Settings(database=database_settings)
-
+    return Settings()
