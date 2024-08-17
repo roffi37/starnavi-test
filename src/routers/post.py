@@ -1,7 +1,7 @@
 from fastapi import Depends
 from fastapi.routing import APIRouter
 
-from src.schemas.post import PostCreateSchema
+from src.schemas.post import PostCreateSchema, PostSchema
 from src.services.post import PostService, get_post_service
 
 router = APIRouter(
@@ -11,7 +11,7 @@ router = APIRouter(
 
 
 @router.get("/")
-async def get_all_users(
+async def get_all_posts(
         service: PostService = Depends(get_post_service)
 ):
     return await service.get_all()
