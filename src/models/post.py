@@ -12,6 +12,7 @@ class Post(Base):
     title: Mapped[str]
     content: Mapped[str]
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    is_blocked: Mapped[bool] = mapped_column(default=False)
     author: Mapped["User"] = relationship(
         back_populates="posts"
     )
@@ -27,4 +28,5 @@ class Post(Base):
             author_id=self.author_id,
             created_at=self.created_at,
             updated_at=self.updated_at,
+            is_blocked=self.is_blocked,
         )

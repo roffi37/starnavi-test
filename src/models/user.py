@@ -14,10 +14,10 @@ class User(Base):
     username: Mapped[str]
     password: Mapped[str]
     comments: Mapped[List["Comment"]] = relationship(
-        back_populates="author"
+        back_populates="author",
     )
     posts: Mapped[List["Post"]] = relationship(
-        back_populates="author"
+        back_populates="author",
     )
 
     def to_read_model(self) -> UserSchema:
