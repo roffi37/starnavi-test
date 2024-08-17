@@ -1,20 +1,16 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 from pydantic import BaseModel
-
-from src.schemas.comment import CommentSchema
-from src.schemas.user import UserSchema
 
 
 class PostCreateSchema(BaseModel):
-    id: int
     title: str
     content: str
-    authors: List[UserSchema]
-    comments: List[CommentSchema]
-
+    author_id: int
 
 
 class PostSchema(PostCreateSchema):
+    id: int
+    is_blocked: bool
     created_at: datetime
     updated_at: Optional[datetime]
