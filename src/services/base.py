@@ -1,12 +1,10 @@
 from abc import ABC
 
-from src.repositories.base import BaseRepository
-
 
 class BaseService(ABC):
 
     def __init__(self, repository):
-        self.repository: BaseRepository = repository
+        self.repository = repository
 
     async def get_all(self):
         return await self.repository.get_all()

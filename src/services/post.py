@@ -1,5 +1,6 @@
+from datetime import UTC, datetime
+
 from fastapi import Depends
-from typing import Annotated
 
 from src.schemas.post import PostCreateSchema
 from src.repositories.post import PostRepository, get_post_repository
@@ -11,10 +12,9 @@ class PostService(BaseService):
 
     async def create_one(self, schema: PostCreateSchema):
         data = schema.model_dump()
-        data["is_blocked"] = check_for_swearing(data.get("content")) or check_for_swearing(data.get("title"))
+        if check_for_swearing(data.get("content")) or check_for_swearing(data.get("title")):
+            data["blocked_at"] = datetime.now(UTC)
         return await self.repository.create_one(data)
 
-PostRepositoryDependency = Annotated[PostRepository, Depends(get_post_repository)]
-
-def get_post_service(repository: PostRepositoryDependency):
+def get_post_service(repository: PostRepository = Depends(get_post_repository)):
     return PostService(repository)
