@@ -1,3 +1,5 @@
+from datetime import date
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 from typing import List
@@ -12,7 +14,7 @@ class Post(Base):
     title: Mapped[str]
     content: Mapped[str]
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    is_blocked: Mapped[bool] = mapped_column(default=False)
+    blocked_at: Mapped[date] = mapped_column(nullable=True)
     author: Mapped["User"] = relationship(
         back_populates="posts"
     )
@@ -28,5 +30,5 @@ class Post(Base):
             author_id=self.author_id,
             created_at=self.created_at,
             updated_at=self.updated_at,
-            is_blocked=self.is_blocked,
+            blocked_at=self.blocked_at,
         )
