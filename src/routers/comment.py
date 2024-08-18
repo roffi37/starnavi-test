@@ -1,5 +1,4 @@
 from typing import List
-
 from fastapi import APIRouter, Depends
 
 from src.schemas.comment import CommentUpdateSchema, CommentSchema
@@ -41,3 +40,12 @@ async def delete_comment(
         service: CommentService = Depends(get_comment_service),
 ):
     return await service.delete(comment_id)
+
+
+@router.get("/comments-daily-breakdown")
+async def get_daily_breakdown(
+        from_date: str,
+        to_date: str,
+        service: CommentService = Depends(get_comment_service),
+):
+    return await service.get_daily_breakdown(from_date, to_date)
