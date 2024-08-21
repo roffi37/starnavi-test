@@ -32,10 +32,16 @@ class OpenAISettings(Base):
     API_KEY: str = Field(default="token")
 
 
+class JWTSettings(Base):
+    JWT_SECRET_KEY: str = Field(default="token")
+    ALGORITHM: str = Field(default="HS256")
+
+
 class Settings(BaseModel):
 
     database: DatabaseSettings = DatabaseSettings()
     openai: OpenAISettings = OpenAISettings()
+    jwt_settings: JWTSettings = JWTSettings()
 
 
 @lru_cache
