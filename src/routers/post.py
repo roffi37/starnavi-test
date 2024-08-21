@@ -1,18 +1,20 @@
 from fastapi import Depends
 from fastapi.routing import APIRouter
 
-from src.schemas.post import PostCreateSchema, PostSchema
+from src.schemas.post import PostCreateSchema
 from src.services.post import PostService, get_post_service
+from src.utils.auth import get_current_user
 
 router = APIRouter(
     prefix="/post",
     tags=["posts"],
+    dependencies=[Depends(get_current_user)],
 )
 
 
 @router.get("/")
 async def get_all_posts(
-        service: PostService = Depends(get_post_service)
+        service: PostService = Depends(get_post_service),
 ):
     return await service.get_all()
 
@@ -20,7 +22,7 @@ async def get_all_posts(
 @router.post("/")
 async def create_post(
         schema: PostCreateSchema,
-        service: PostService = Depends(get_post_service)
+        service: PostService = Depends(get_post_service),
 ):
     return await service.create_one(schema)
 
@@ -29,7 +31,7 @@ async def create_post(
 async def update_post(
         post_id: int,
         schema: PostCreateSchema,
-        service: PostService = Depends(get_post_service)
+        service: PostService = Depends(get_post_service),
 ):
     return await service.update_one(post_id, schema)
 
@@ -37,6 +39,6 @@ async def update_post(
 @router.delete("/{post_id}")
 async def delete_post(
         post_id: int,
-        service: PostService = Depends(get_post_service)
+        service: PostService = Depends(get_post_service),
 ):
     return await service.delete(post_id)

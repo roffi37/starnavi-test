@@ -4,11 +4,15 @@ from fastapi import APIRouter, Depends
 from src.schemas.comment import CommentUpdateSchema, CommentSchema
 from src.schemas.comment import CommentCreateSchema
 from src.services.comment import CommentService, get_comment_service
+from utils.auth import get_current_user
+
 
 router = APIRouter(
     prefix="/comment",
     tags=["comment"],
+    dependencies=[Depends(get_current_user)]
 )
+
 
 @router.get("/", response_model=List[CommentSchema])
 async def get_all_comments(
