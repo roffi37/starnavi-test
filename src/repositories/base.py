@@ -1,12 +1,13 @@
 from abc import ABC
-from pydantic_settings import BaseSettings
+
+from pydantic import BaseModel
 from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class BaseRepository(ABC):
 
-    def __init__(self, session: AsyncSession, settings: BaseSettings, model):
+    def __init__(self, session: AsyncSession, settings: BaseModel, model):
         self.session = session
         self.settings = settings
         self.model = model
