@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from src.schemas.user import UserCreateSchema
+from src.schemas.user import UserCreateSchema, UserSignInSchema
 from src.services.user import get_user_service, UserService
 
 router = APIRouter(
@@ -36,3 +36,11 @@ async def delete_user(
         service: UserService = Depends(get_user_service),
 ):
     return await service.delete(user_id)
+
+
+@router.post("/signin")
+async def signin_user(
+        schema: UserSignInSchema,
+        service: UserService = Depends(get_user_service),
+):
+    return await service.sign_in(schema)
