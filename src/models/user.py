@@ -1,3 +1,4 @@
+from sqlalchemy import LargeBinary
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from typing import List
 
@@ -12,7 +13,7 @@ class User(Base):
 
     email: Mapped[str] = mapped_column(unique=True)
     username: Mapped[str]
-    password: Mapped[str]
+    password: Mapped[bytes] = mapped_column(LargeBinary)
     comments: Mapped[List["Comment"]] = relationship(
         back_populates="author",
     )
