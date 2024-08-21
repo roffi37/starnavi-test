@@ -3,10 +3,13 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr
 
 
-class UserCreateSchema(BaseModel):
+class UserSignInSchema(BaseModel):
     email: EmailStr
-    username: str
     password: str
+
+
+class UserCreateSchema(UserSignInSchema):
+    username: str
 
 
 class UserSchema(UserCreateSchema):
