@@ -16,5 +16,9 @@ class PostService(BaseService):
             data["blocked_at"] = datetime.now(UTC)
         return await self.repository.create_one(data)
 
+    async def update_one(self, id_, schema):
+        data = schema.model_dump()
+        return await self.repository.update_one(id_, data)
+
 def get_post_service(repository: PostRepository = Depends(get_post_repository)):
     return PostService(repository)
