@@ -35,10 +35,10 @@ class OpenAISettings(Base):
 class JWTSettings(Base):
     JWT_SECRET_KEY: str = Field(default="token")
     ALGORITHM: str = Field(default="HS256")
+    EXPIRE_MINUTES: int = Field(default=5)
 
 
 class Settings(BaseModel):
-
     database: DatabaseSettings = DatabaseSettings()
     openai: OpenAISettings = OpenAISettings()
     jwt_settings: JWTSettings = JWTSettings()
