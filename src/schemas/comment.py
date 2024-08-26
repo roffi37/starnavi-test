@@ -7,6 +7,7 @@ from pydantic import BaseModel
 class CommentCreateSchema(BaseModel):
     content: str
     author_id: int
+    parent_comment_id: Optional[int] = None
     post_id: int
 
 
