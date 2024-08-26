@@ -1,19 +1,23 @@
-from datetime import date
-
 from fastapi import Depends
-from numpy.ma.core import resize
 from pydantic_settings import BaseSettings
-from sqlalchemy import select, func, case, between, union_all, Integer, text
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.models.comment import Comment
+from src.models.post import Post
 from src.schemas.comment import DailyBreakdown
 from src.config import get_settings
 from src.db.db import get_async_session
-from src.models.comment import Comment
 from src.repositories.base import BaseRepository
 
 
 class CommentRepository(BaseRepository):
+
+    async def check_if_related_to_post_with_auto_response(self, post_id: int) -> bool:
+        stmt = select(Post).where(Post.id == post_id)
+        result = await self.session.execute(stmt)
+        return result.scalar().to_read_model()
+
 
     async def get_daily_breakdown(self, from_date, to_date):
         stmt = (
