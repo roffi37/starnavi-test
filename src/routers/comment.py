@@ -1,10 +1,12 @@
+from datetime import date, timedelta
 from typing import List
-from fastapi import APIRouter, Depends
+
+from fastapi import APIRouter, Depends, Query, BackgroundTasks
 
 from src.schemas.comment import CommentUpdateSchema, CommentSchema
 from src.schemas.comment import CommentCreateSchema
 from src.services.comment import CommentService, get_comment_service
-from utils.auth import get_current_user
+from src.utils.auth import get_current_user
 
 
 router = APIRouter(
@@ -24,9 +26,10 @@ async def get_all_comments(
 @router.post("/")
 async def create_comment(
         schema: CommentCreateSchema,
+        background_task: BackgroundTasks,
         service: CommentService = Depends(get_comment_service),
 ):
-    return await service.create_one(schema)
+    return await service.create_one(schema, background_task)
 
 
 @router.put("/{comment_id}", response_model=CommentUpdateSchema)
@@ -48,8 +51,8 @@ async def delete_comment(
 
 @router.get("/comments-daily-breakdown")
 async def get_daily_breakdown(
-        from_date: str,
-        to_date: str,
+        from_date: str = Query(default=date.today() - timedelta(days=30)),
+        to_date: str = Query(default=date.today()),
         service: CommentService = Depends(get_comment_service),
 ):
     return await service.get_daily_breakdown(from_date, to_date)
