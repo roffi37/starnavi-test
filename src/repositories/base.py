@@ -23,6 +23,7 @@ class BaseRepository(ABC):
     async def create_one(self, data):
         stmt = insert(self.model).values(data).returning(self.model)
         result = await self.session.execute(stmt)
+        await self.session.commit()
         return result.scalar().to_read_model()
 
     async def update_one(self, id_, data):
