@@ -17,7 +17,7 @@ async def get_all_users(service: UserService = Depends(get_user_service)):
 async def create_user(
         schema: UserCreateSchema,
         service: UserService = Depends(get_user_service),
-    ):
+):
     return await service.create_one(schema)
 
 

@@ -17,7 +17,6 @@ class CommentUpdateSchema(BaseModel):
     dislikes: int
 
 
-
 class CommentSchema(CommentUpdateSchema, CommentCreateSchema):
     id: int
     created_at: datetime

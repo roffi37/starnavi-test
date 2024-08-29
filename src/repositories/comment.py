@@ -18,7 +18,6 @@ class CommentRepository(BaseRepository):
         result = await self.session.execute(stmt)
         return result.scalar().to_read_model()
 
-
     async def get_daily_breakdown(self, from_date, to_date):
         stmt = (
             select(

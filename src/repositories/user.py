@@ -20,7 +20,6 @@ class UserRepository(BaseRepository):
         raise sign_in_error
 
 
-
 def get_user_repository(
         session: AsyncSession = Depends(get_async_session),
         settings: Settings = Depends(get_settings),
