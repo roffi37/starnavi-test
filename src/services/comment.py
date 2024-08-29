@@ -13,7 +13,7 @@ class CommentService(BaseService):
 
     async def _create_auto_reply_comment(self, created_comment: CommentSchema):
         related_post = await self.repository.check_if_related_to_post_with_auto_response(created_comment.post_id)
-        if related_post.is_auto_response and created_comment.author_id != related_post.author_id:
+        if related_post.is_auto_response and created_comment.author_id != related_post.author_id and not related_post.blocked_at:
             data = await create_auto_reply(created_comment, related_post)
             return await self.repository.create_one(data.model_dump())
 
