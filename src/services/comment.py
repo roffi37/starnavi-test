@@ -18,7 +18,7 @@ class CommentService(BaseService):
             data = await create_auto_reply(created_comment, related_post)
             return await self.repository.create_one(data.model_dump())
 
-    async def create_one(self, schema, background_tasks: BackgroundTasks = None):
+    async def create_one(self, schema, background_tasks: BackgroundTasks = Depends(BackgroundTasks)):
         data = schema.model_dump()
         if check_for_swearing(data.get("content")):
             data["blocked_at"] = datetime.now(UTC)
