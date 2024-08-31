@@ -11,7 +11,7 @@ from src.config import get_settings
 settings = get_settings()
 
 @pytest.mark.asyncio(loop_scope="session")
-async def test_test(session, create):
+async def test_user_creating(session, create):
     service = get_user_service(get_user_repository(session, settings))
     user = UserCreateSchema(
         username="bob",

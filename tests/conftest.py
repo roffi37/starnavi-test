@@ -1,20 +1,22 @@
-import pytest
 import pytest_asyncio
 from fastapi import BackgroundTasks
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
+from src.config import get_develop_settings
 from src.repositories.comment import get_comment_repository
-from src.schemas.comment import CommentCreateSchema
-from src.services.comment import get_comment_service
 from src.repositories.post import get_post_repository
-from src.schemas.post import PostCreateSchema
-from src.services.post import get_post_service
 from src.repositories.user import get_user_repository
-from src.schemas.user import UserCreateSchema
+from src.services.comment import get_comment_service
+from src.services.post import get_post_service
 from src.services.user import get_user_service
-from src.db.db import Base, settings
+from src.schemas.comment import CommentCreateSchema
+from src.schemas.post import PostCreateSchema
+from src.schemas.user import UserCreateSchema
+from src.db.db import Base
 
-engine = create_async_engine("postgresql+asyncpg://user:123@localhost:5432/test")
+settings = get_develop_settings()
+
+engine = create_async_engine(settings.database.generate_async_database_url())
 async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 @pytest_asyncio.fixture

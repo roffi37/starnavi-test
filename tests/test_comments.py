@@ -1,7 +1,7 @@
 from datetime import datetime, UTC
 
 import pytest
-from fastapi import BackgroundTasks
+from fastapi import BackgroundTasks, HTTPException
 
 from src.config import get_settings
 from src.repositories.comment import get_comment_repository
@@ -10,6 +10,17 @@ from src.services.comment import get_comment_service
 
 settings = get_settings()
 
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_comments_creating_with_not_existed_relation(session):
+    service = get_comment_service(get_comment_repository(session, settings))
+    comment = CommentCreateSchema(
+        content="content",
+        author_id=1,
+        post_id=1,
+    )
+    with pytest.raises(HTTPException):
+        await service.create_one(comment)
 
 
 @pytest.mark.asyncio(loop_scope="session")
