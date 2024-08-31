@@ -8,7 +8,8 @@ services:
     ports:
       - "8000:8000"
     command:
-      ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+      /bin/sh -c "python3 src/wait_for_db.py && uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
+
   database:
     image: postgres
     env_file:
