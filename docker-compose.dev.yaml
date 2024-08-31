@@ -1,0 +1,13 @@
+services:
+  test_database:
+    image: postgres
+    env_file:
+      - .env.dev
+    ports:
+      - "5433:5433"
+    networks:
+      - test_network
+
+networks:
+  test_network:
+    driver: bridge
